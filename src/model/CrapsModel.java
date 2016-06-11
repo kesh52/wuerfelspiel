@@ -17,20 +17,21 @@ public class CrapsModel {
     public static List<Integer> fivesJackpot;
 
     static {
-        dices = new ArrayList<DiceModel>();
+        /*dices = new ArrayList<DiceModel>();
+        for (int i = 1; i <= NUMBER_OF_DICES; i++) {
+            dices.add(i, new DiceModel(false, true));
+        }*/
+
         onesJackpot = new ArrayList<Integer>();
         fivesJackpot = new ArrayList<Integer>();
-        for (int i = 0; i <= NUMBER_OF_DICES; i++) {
-            dices.add(i, new DiceModel(false, true));
-        }
     }
 
     public static List<DiceModel> getDices() {
         return dices;
     }
 
-    public static void setDices(List<DiceModel> dices) {
-        CrapsModel.dices = dices;
+    public static void setDices(List<DiceModel> newDices) {
+        dices = newDices;
     }
 
     public static void throwCraps() {
@@ -101,7 +102,7 @@ public class CrapsModel {
             }
         }
 
-        //Don't consider jackpot dices in the next turn
+        // Don't consider jackpot dices in the next turn
         if (fivesJackpot.size() == 3) {
             total = FIVE_H_POINTS;
             for (Integer idx : fivesJackpot) {

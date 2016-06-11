@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import model.CrapsModel;
+import model.DiceModel;
 import model.FalseDice;
 import model.NoOnesOrFivesException;
 import model.Player1;
@@ -25,6 +26,12 @@ public class Game {
 
         // Player 1 has the first turn
         curPlayer = players.get(0);
+
+        List<DiceModel> dices = new ArrayList<DiceModel>();
+        for (int i = 0; i <= 6; i++) {
+            dices.add(i, new DiceModel(false, true));
+        }
+        CrapsModel.setDices(dices);
 
         makeTurn();
 

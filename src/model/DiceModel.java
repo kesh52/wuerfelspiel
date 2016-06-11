@@ -10,6 +10,12 @@ public class DiceModel {
         this.canUse = canUse;
     }
 
+    public DiceModel(boolean fixed, boolean canUse, int value) {
+        this.fixed = fixed;
+        this.canUse = canUse;
+        this.value = value;
+    }
+
     public boolean canUse() {
         return canUse;
     }
