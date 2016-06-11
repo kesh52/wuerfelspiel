@@ -5,8 +5,6 @@ public class DiceModel {
     private boolean fixed;
     private boolean canUse;
 
-
-
     public DiceModel(boolean fixed, boolean canUse) {
         this.fixed = fixed;
         this.canUse = canUse;

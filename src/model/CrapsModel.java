@@ -7,10 +7,10 @@ import java.util.Random;
 public class CrapsModel {
     private static List<DiceModel> dices;
     public static final int NUMBER_OF_DICES = 6;
-    public static final int FIFTY_POINTS = 50;
-    public static final int ONE_H_POINTS = 100;
-    public static final int FIVE_H_POINTS = 500;
-    public static final int ONE_T_POINTS = 1000;
+    private static final int FIFTY_POINTS = 50;
+    private static final int ONE_H_POINTS = 100;
+    private static final int FIVE_H_POINTS = 500;
+    private static final int ONE_T_POINTS = 1000;
     public static int total = 0;
 
     public static List<Integer> onesJackpot;
@@ -46,9 +46,8 @@ public class CrapsModel {
     }
 
     public static int changeState(ArrayList<Integer> indexes) throws NoOnesOrFivesException, FalseDice {
-        // TODO set fixed elements
-        boolean containsFreeOneOrFive = containsFreeOneOrFive();
 
+        boolean containsFreeOneOrFive = containsFreeOneOrFive();
         if (!containsFreeOneOrFive) {
             throw new NoOnesOrFivesException("No one or five");
         }
@@ -63,12 +62,14 @@ public class CrapsModel {
                 continue;
             }
 
+            // Fix dice if its value 1 or 5
             if (curValue == 1 || curValue == 5) {
                 dice.setFixed(true);
             } else {
                 throw new FalseDice("You can't fix this dice");
             }
 
+            // Check if there is a three of kind for ones and fives
             if (onesJackpot.size() <= 3 && curValue == 1) {
                 onesJackpot.add(idx);
             }
@@ -82,7 +83,7 @@ public class CrapsModel {
             DiceModel curDice = dices.get(i);
             boolean canUse = curDice.canUse();
 
-            // TODO compute last three of kind turn
+            // Compute last three of kind turn
             if (!canUse && curDice.getValue() == 1) {
                 total = ONE_T_POINTS;
             }
@@ -92,64 +93,29 @@ public class CrapsModel {
             }
         }
 
-        // onesJackpot contains indexes of ones in this run
+        // Don't consider jackpot dices in the next turn
         if (onesJackpot.size() == 3) {
             total = ONE_T_POINTS;
-
             for (Integer idx : onesJackpot) {
                 dices.get(idx).setCanUse(false);
             }
-
-            for (int i = 1; i <= NUMBER_OF_DICES; i++) {
-                /*if (!onesJackpot.contains(i)) {
-                    DiceModel curDice = dices.get(i);
-                    boolean fixed = curDice.isFixed();
-                    if (fixed) {
-                        int curValue = curDice.getValue();
-                        switch (curValue) {
-                        case 1:
-                            total += ONE_H_POINTS;
-                            break;
-                        case 5:
-                            total += FIFTY_POINTS;
-                            break;
-                        }
-                    }
-                }*/
-            }
         }
 
+        //Don't consider jackpot dices in the next turn
         if (fivesJackpot.size() == 3) {
             total = FIVE_H_POINTS;
-
             for (Integer idx : fivesJackpot) {
                 dices.get(idx).setCanUse(false);
             }
-
-            for (int i = 1; i <= NUMBER_OF_DICES; i++) {
-                /*if (!fivesJackpot.contains(i)) {
-                    DiceModel curDice = dices.get(i);
-                    boolean fixed = curDice.isFixed();
-                    if (fixed) {
-                        int curValue = curDice.getValue();
-                        switch (curValue) {
-                        case 1:
-                            total += ONE_H_POINTS;
-                            break;
-                        case 5:
-                            total += FIFTY_POINTS;
-                            break;
-                        }
-                    }
-                }*/
-            }
         }
 
-        // TODO remove jackpot dices
+        // Don't look at jackpot dices
         for (int i = 1; i <= NUMBER_OF_DICES; i++) {
             DiceModel curDice = dices.get(i);
             boolean fixed = curDice.isFixed();
             boolean canUse = curDice.canUse();
+
+            // Compute left fixed dices
             if (fixed && canUse) {
                 int curValue = curDice.getValue();
                 switch (curValue) {
@@ -163,9 +129,7 @@ public class CrapsModel {
             }
         }
 
-        // int total = dices.stream().mapToInt(i -> i.getValue()).sum();
-
-        // TODO reset all values for the next throw
+        // Reset all values before next throw
         onesJackpot = new ArrayList<Integer>();
         fivesJackpot = new ArrayList<Integer>();
         int returnTotal = total;
@@ -174,7 +138,7 @@ public class CrapsModel {
         return returnTotal;
     }
 
-    public static boolean containsFreeOneOrFive() {
+    private static boolean containsFreeOneOrFive() {
         for (int i = 1; i <= NUMBER_OF_DICES; i++) {
             DiceModel dice = dices.get(i);
             boolean oneFound = dice.getValue() == 1;
