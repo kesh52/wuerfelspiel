@@ -1,6 +1,8 @@
 package tests;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,15 +35,15 @@ public class TestChangeState {
     public static Collection<Object[]> data() {
         List<DiceModel> test1 = new ArrayList<DiceModel>(
                     Arrays.asList(
-                            // First element is a fake element, because i count from 1 and not 0
-                            new DiceModel(false, true, -100),
-                            new DiceModel(false, true, 1),
-                            new DiceModel(false, true, 1),
-                            new DiceModel(false, true, 1),
-                            new DiceModel(false, true, 1),
-                            new DiceModel(false, true, 1),
-                            new DiceModel(false, true, 1)
-                            )
+                        // First element is a fake element, because i count from 1 and not 0
+                        new DiceModel(false, true, -100),
+                        new DiceModel(false, true, 1),
+                        new DiceModel(false, true, 1),
+                        new DiceModel(false, true, 1),
+                        new DiceModel(false, true, 1),
+                        new DiceModel(false, true, 1),
+                        new DiceModel(false, true, 1)
+                        )
                 );
 
         List<DiceModel> test2 = new ArrayList<DiceModel>(
@@ -57,20 +59,65 @@ public class TestChangeState {
                         )
             );
 
+        List<DiceModel> test3 = new ArrayList<DiceModel>(
+                Arrays.asList(
+                        // First element is a fake element, because i count from 1 and not 0
+                        new DiceModel(false, true, -100),
+                        new DiceModel(false, true, 5),
+                        new DiceModel(false, true, 5),
+                        new DiceModel(false, true, 5),
+                        new DiceModel(false, true, 1),
+                        new DiceModel(false, true, 2),
+                        new DiceModel(false, true, 3)
+                        )
+            );
+
+        List<DiceModel> test4 = new ArrayList<DiceModel>(
+                Arrays.asList(
+                        // First element is a fake element, because i count from 1 and not 0
+                        new DiceModel(false, true, -100),
+                        new DiceModel(false, true, 2),
+                        new DiceModel(false, true, 3),
+                        new DiceModel(false, true, 4),
+                        new DiceModel(false, true, 2),
+                        new DiceModel(false, true, 4),
+                        new DiceModel(false, true, 5)
+                        )
+            );
+
+        List<DiceModel> test5 = new ArrayList<DiceModel>(
+                Arrays.asList(
+                        // First element is a fake element, because i count from 1 and not 0
+                        new DiceModel(false, true, -100),
+                        new DiceModel(false, true, 2),
+                        new DiceModel(false, true, 3),
+                        new DiceModel(false, true, 4),
+                        new DiceModel(false, true, 2),
+                        new DiceModel(false, true, 4),
+                        new DiceModel(false, true, 5)
+                        )
+            );
+
         return Arrays
-                .asList(new Object[][] { {test1, new ArrayList<Integer>(Arrays.asList(1, 2, 3)), 1000}, {test2, new ArrayList<Integer>(Arrays.asList(1)), 100} });
+                .asList(new Object[][] {
+                        {test1, new ArrayList<Integer>(Arrays.asList(1, 2, 3)), 1000},
+                        {test2, new ArrayList<Integer>(Arrays.asList(1)), 100},
+                        {test3, new ArrayList<Integer>(Arrays.asList(1, 2, 3)), 500},
+                        {test4, new ArrayList<Integer>(Arrays.asList(1, 2, 3)), 500},
+                        {test5, new ArrayList<Integer>(Arrays.asList(6)), 50},
+                    });
 
     }
 
     @Test
-    public void testChange() {
+    public void testChangeStateFunction() {
         CrapsModel.setDices(data);
         try {
             assertEquals(expected, CrapsModel.changeState(new ArrayList<Integer>(indexesToFix)));
-        } catch (NoOnesOrFivesException | FalseDice e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (NoOnesOrFivesException exception) {
+            assertThat(exception.getMessage(), is("No one or five"));
+        } catch (FalseDice exception) {
+            // TODO: handle exception
         }
-
     }
 }
